@@ -1,0 +1,13 @@
+name: ${name}
+description: ${description}
+version: ${version}
+author: ${author}
+main: ${mainClass}
+website: ${url}
+permissions:
+  throwableArrows.use:
+    description: Allows throwing arrows.
+    default: true
+  throwableArrows.use.stack:
+    description: Allows throwing stacks of arrows.
+    default: op
