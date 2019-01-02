@@ -17,18 +17,14 @@ import java.io.IOException;
  * A plugin created to allow people to throw arrows.
  * @author UberPilot
  */
-public class ThrowableArrows extends JavaPlugin
+public class ThrowableArrows extends JavaPlugin implements Listener
 {
     private double modifier;
     private FileConfiguration config = this.getConfig();
     private ThrowableArrows pl;
 
     @Override
-    public void onLoad()
-    {
-    }
-
-    @Override
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void onEnable()
     {
         pl = this;
@@ -48,49 +44,51 @@ public class ThrowableArrows extends JavaPlugin
             e.printStackTrace();
         }
 
-        getServer().getPluginManager().registerEvents(new Listener()
+        getServer().getPluginManager().registerEvents(this, this);
+    }
+
+    @EventHandler
+    private void onItemDropEvent(PlayerDropItemEvent e)
+    {
+        if(e.getItemDrop().getItemStack().getType() == Material.ARROW)
         {
-            @EventHandler
-            void onItemDropEvent(PlayerDropItemEvent e)
+            Player p = e.getPlayer();
+            if(!p.isSneaking())
             {
-                if(e.getItemDrop().getItemStack().getType() == Material.ARROW)
+                if(p.hasPermission("throwableArrows.use.stack"))
                 {
-                    Player p = e.getPlayer();
-                    if(!p.isSneaking())
+                    Bukkit.getScheduler().runTaskAsynchronously(pl, () ->
                     {
-                        if(p.hasPermission("throwableArrows.use.stack"))
+                        int i = e.getItemDrop().getItemStack().getAmount();
+                        e.getItemDrop().remove();
+                        for (; i > 0; i--)
                         {
-                            Bukkit.getScheduler().runTaskAsynchronously(pl, () ->
+                            spawnArrow(Bukkit.getPlayer(p.getUniqueId()));
+                            try
                             {
-                                int i = e.getItemDrop().getItemStack().getAmount();
-                                e.getItemDrop().remove();
-                                for (; i > 0; i--)
-                                {
-                                    spawnArrow(Bukkit.getPlayer(p.getUniqueId()));
-                                    try
-                                    {
-                                        Thread.sleep(25);
-                                    }
-                                    catch (InterruptedException e1)
-                                    {
-                                        e1.printStackTrace();
-                                    }
-                                }
-                            });
+                                Thread.sleep(25);
+                            }
+                            catch (InterruptedException e1)
+                            {
+                                e1.printStackTrace();
+                            }
                         }
-                        else if (p.hasPermission("throwableArrows.use"))
-                        {
-                            e.getItemDrop().getItemStack().setAmount(e.getItemDrop().getItemStack().getAmount() - 1);
-                            spawnArrow(p);
-                        }
-                    }
+                    });
+                }
+                else if (p.hasPermission("throwableArrows.use"))
+                {
+                    e.getItemDrop().getItemStack().setAmount(e.getItemDrop().getItemStack().getAmount() - 1);
+                    spawnArrow(p);
                 }
             }
-        }, pl);
+        }
     }
 
     private void spawnArrow(Player p)
     {
-        Bukkit.getScheduler().runTask(pl, () -> p.launchProjectile(Arrow.class));
+        Bukkit.getScheduler().runTask(pl, () -> {
+            Arrow a = p.launchProjectile(Arrow.class);
+            a.setVelocity(a.getVelocity().multiply(modifier));
+        });
     }
 }
