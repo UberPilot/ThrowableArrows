@@ -1,13 +1,23 @@
-name: ${name}
-description: ${description}
-version: ${version}
-author: ${author}
-main: ${mainClass}
-website: ${url}
+name: ${project.artifactId}
+description: ${project.description}
+version: ${project.version}
+authors:
+  - UberPilot
+main: org.projpi.throwablearrows.ThrowableArrows
+website: ${project.url}
 permissions:
   throwableArrows.use:
     description: Allows throwing arrows.
     default: true
   throwableArrows.use.stack:
     description: Allows throwing stacks of arrows.
+    default: op
+  throwableArrows.use.drop:
+    description: Allows throwing arrows by dropping them.
+    default: true
+  throwableArrows.use.click:
+    description: Allows throwing arrows by right clicking them.
+    default: true
+  throwableArrows.cooldown.exempt:
+    description: Allows players to bypass the cooldown.
     default: op
