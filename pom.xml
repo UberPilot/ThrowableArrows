@@ -4,10 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.projpi.uberpilot.throwablearrows</groupId>
+    <groupId>org.projpi</groupId>
     <artifactId>ThrowableArrows</artifactId>
-    <version>1.3.0</version>
+    <version>1.4.0</version>
     <packaging>jar</packaging>
+    <url>https://github.com/UberPilot/ThrowableArrows</url>
 
     <!-- ThrowableArrows Plugin Info -->
     <name>ThrowableArrows</name>
@@ -17,7 +18,7 @@
     <properties>
         <!--  Author and MainClass are used in plugin.yml -->
         <author>UberPilot</author>
-        <mainClass>org.projpi.uberpilot.throwablearrows.ThrowableArrows</mainClass>
+        <mainClass>org.projpi.throwablearrows.ThrowableArrows</mainClass>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
